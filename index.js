@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const { create } = require("xmlbuilder2");
 const https = require("https");
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
@@ -17,13 +18,15 @@ app.get("/test/", async (request, response) => {
   const baseUrl = request.query.url;
   const url = baseUrl.substring(1, baseUrl.length - 1);
 
-  const server = "https://20.195.101.222/api/";
+  const server = process.env.SERVER_URL;
 
+  console.log(`Server: ${server}`)
+  
   try {
     const userData = {
       User: {
-        login_id: "cenmetrixa",
-        password: "cenmtx@1",
+        login_id: process.env.LOGIN,
+        password: process.env.PASSWORD,
       },
     };
 
