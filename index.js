@@ -20,8 +20,8 @@ app.get("/test/", async (request, response) => {
 
   const server = process.env.SERVER_URL;
 
-  console.log(`Server: ${server}`)
-  
+  console.log(`Server: ${server}`);
+
   try {
     const userData = {
       User: {
@@ -39,9 +39,15 @@ app.get("/test/", async (request, response) => {
       "bs-session-id": resHeaders["bs-session-id"],
     };
 
-    const { data } = await instance.get(`${server}${url}`, {
-      headers: reqHeaders,
-    });
+    const { data } = await instance.post(
+      `${server}${url}`,
+      {
+        monitoring_permission: true,
+      },
+      {
+        headers: reqHeaders,
+      }
+    );
 
     const doc = create({ responseXml: data });
     const finalXml = doc.end();
