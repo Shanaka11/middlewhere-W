@@ -49,7 +49,7 @@ app.get("/test/", async (request, response) => {
       }
     );
 
-    const doc = create({ responseXml: data });
+    const doc = create({ responseXml: decodeResponse(data) });
     const finalXml = doc.end();
 
     response.set("Content-Type", "text/xml");
@@ -66,8 +66,20 @@ app.get("/test/", async (request, response) => {
   }
 });
 
+const decodeResponse = (data) => {
+  const temp = data.DoorStatusCollection.rows.map((door) => {
+    return {
+      id: door.door_id.id,
+      opened: door.opened,
+      alarm: door.alarm,
+    };
+  });
+  console.log(temp);
+  return temp;
+};
+
 // Request Template
-// http://localhost:8081/test/?url=device_groups
+// http://localhost:8081/test/?url="doors/status"
 const listener = app.listen(8081, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
